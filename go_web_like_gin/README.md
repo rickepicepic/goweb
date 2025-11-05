@@ -55,9 +55,9 @@ go run main.go
 访问：
 
 - 指南页（中文）：http://localhost:9999/
-- ![指南页截图](../img_1.png)
+- ![img_1.png](img_1.png)
 - AI 聊天页：http://localhost:9999/ai
-- ![聊天页截图](../img_2.png)
+- ![img_2.png](img_2.png)
 - 分组 API 示例：
   - `GET /api/v1/ping`
   - `GET /api/v1/users/:name`
