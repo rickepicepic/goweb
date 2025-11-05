@@ -1,0 +1,46 @@
+{{ define "guide.tmpl" }}
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ .title }}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <h1>{{ .title }}</h1>
+  <p class="muted">当前时间：{{ now }}</p>
+</header>
+<main>
+  <section>
+    <h2>路由总览</h2>
+    <table class="routes">
+      <thead>
+        <tr><th>方法</th><th>路径</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+      {{ range .routes }}
+        <tr>
+          <td><span class="method">{{ .method }}</span></td>
+          <td><code>{{ .path }}</code></td>
+          <td>{{ .desc }}</td>
+        </tr>
+      {{ end }}
+      </tbody>
+    </table>
+  </section>
+  <section>
+    <h2>试一试 AI 助手</h2>
+    <p>
+      打开聊天界面：<a href="/ai">/ai</a>，或直接调用 API：
+    </p>
+    <pre class="code">curl -X POST http://localhost:9999/api/ai/chat -d 'q=Hello Dipperick'</pre>
+  </section>
+</main>
+<footer>
+  <p class="muted">由一个轻量化的 Gin 风格 Web 框架驱动</p>
+</footer>
+</body>
+</html>
+{{ end }}

@@ -1,0 +1,27 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Go
+/bin/
+/pkg/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# IDE/editor
+.idea/
+.vscode/
+*.iml
+
+# Logs
+*.log
+
+# Coverage
+coverage.out
+

@@ -1,0 +1,74 @@
+{{ define "ai.tmpl" }}
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ .title }}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <h1>🤖 {{ .title }}</h1>
+  <nav><a href="/">← 返回</a></nav>
+</header>
+<main>
+  <div class="chat">
+    <ul id="history">
+      {{ range .history }}
+      <li>{{ . }}</li>
+      {{ else }}
+      <li class="muted">还没有对话，先打个招呼吧～</li>
+      {{ end }}
+    </ul>
+    <form id="chat-form">
+      <input type="text" id="q" name="q" placeholder="向 Dipperick 的 AI 助手提问…" autocomplete="off" required />
+      <div style="display:flex; gap:8px">
+        <button type="submit">发送</button>
+        <button id="clear" type="button" class="secondary">清空对话</button>
+      </div>
+    </form>
+  </div>
+</main>
+<script>
+const form = document.getElementById('chat-form');
+const input = document.getElementById('q');
+const history = document.getElementById('history');
+const clearBtn = document.getElementById('clear');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const q = input.value.trim();
+  if (!q) return;
+  history.insertAdjacentHTML('beforeend', `<li>你: ${q}</li>`);
+  input.value = '';
+  try {
+    const resp = await fetch('/api/ai/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ q })
+    });
+    const data = await resp.json();
+    if (data.error) {
+      history.insertAdjacentHTML('beforeend', `<li class="error">错误：${data.error}</li>`);
+    } else {
+      history.insertAdjacentHTML('beforeend', `<li>助手: ${data.answer}</li>`);
+    }
+    history.scrollTop = history.scrollHeight;
+  } catch (err) {
+    history.insertAdjacentHTML('beforeend', `<li class="error">网络错误</li>`);
+  }
+});
+
+clearBtn.addEventListener('click', async () => {
+  try {
+    await fetch('/api/ai/reset', { method: 'POST' });
+    history.innerHTML = '<li class="muted">对话已清空。</li>';
+  } catch (err) {
+    history.insertAdjacentHTML('beforeend', `<li class="error">清空失败</li>`);
+  }
+});
+</script>
+</body>
+</html>
+{{ end }}
